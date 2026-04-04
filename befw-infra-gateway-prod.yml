@@ -1,0 +1,11 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://befw-infra-eureka:8761/eureka/
+
+spring:
+  cloud:
+    gateway:
+      # prod에서는 HTTPS 강제
+      default-filters:
+        - SecureHeaders

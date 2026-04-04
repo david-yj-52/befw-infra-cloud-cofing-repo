@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET}   # 환경변수로 주입 (befw-server-be와 동일한 값)
+
+spring:
+  cloud:
+    gateway:
+      # Eureka 기반 자동 서비스 디스커버리
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # 메인 B/E 서버
+        - id: befw-server-be
+          uri: lb://befw-server-be       # Eureka에서 자동 탐색
+          predicates:
+            - Path=/api/**
+          filters:
+            - StripPrefix=0
+
+        # 인증 경로 (JWT 필터 whitelist와 맞춤)
+        - id: befw-auth
+          uri: lb://befw-server-be
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
