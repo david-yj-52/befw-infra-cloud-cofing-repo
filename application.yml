@@ -1,0 +1,6 @@
+# application.yml (공통 설정 - 모든 서비스에 적용)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

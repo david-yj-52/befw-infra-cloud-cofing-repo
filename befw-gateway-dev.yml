@@ -1,0 +1,7 @@
+# befw-gateway-dev.yml
+server:
+  port: 8080
+eureka:
+  client:
+    service-url:
+      defaultZone: http://befw-eureka:8761/eureka/
