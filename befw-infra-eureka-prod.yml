@@ -1,0 +1,5 @@
+eureka:
+  instance:
+    hostname: befw-infra-eureka
+  server:
+    enable-self-preservation: true   # prod에서는 self-preservation 활성화
