@@ -1,4 +1,4 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://befw-infra-eureka:8761/eureka/
+      defaultZone: http://tsh-eureka:8761/eureka/
