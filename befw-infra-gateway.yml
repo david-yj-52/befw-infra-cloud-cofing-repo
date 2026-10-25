@@ -29,6 +29,12 @@ spring:
           filters:
             - StripPrefix=0
 
+        # D94 조회 서비스
+        - id: d94-query
+          uri: lb://d94-query
+          predicates:
+            - Path=/tsh/**
+
 eureka:
   client:
     service-url:
