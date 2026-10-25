@@ -1,0 +1,7 @@
+eureka:
+  instance:
+    hostname: cloud-eureka
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://cloud-eureka:8761/eureka/
