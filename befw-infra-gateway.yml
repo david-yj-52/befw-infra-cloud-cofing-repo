@@ -4,6 +4,9 @@ server:
 
 jwt:
   secret: ${JWT_SECRET}   # 환경변수로 주입 (befw-server-be와 동일한 값)
+  # 게이트웨이 JWT 검사를 건너뛸 경로 prefix (쉼표 구분). 해당 서비스가 직접 JWT 를 검증한다
+  # - /tsh/ : d94-query (키를 Base64 디코딩해 서명 → 이 게이트웨이의 키 형식과 달라 여기서 검증 불가)
+  skip-path-prefixes: /tsh/
 
 spring:
   cloud:
