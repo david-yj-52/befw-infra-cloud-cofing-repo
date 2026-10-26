@@ -1,5 +1,6 @@
 server:
-  port: 8080
+  # 게이트웨이 compose 의 포트 매핑(10001:10001)·healthcheck(localhost:10001), UMD routes 와 맞춘다
+  port: 10001
 
 jwt:
   secret: ${JWT_SECRET}   # 환경변수로 주입 (befw-server-be와 동일한 값)
