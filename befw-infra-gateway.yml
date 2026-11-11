@@ -7,7 +7,9 @@ jwt:
   # 게이트웨이 JWT 검사를 건너뛸 경로 prefix (쉼표 구분). 해당 서비스가 직접 JWT 를 검증한다
   # - /tsh/ : d94-query (키를 Base64 디코딩해 서명 → 이 게이트웨이의 키 형식과 달라 여기서 검증 불가)
   # - /pdf/ : d94-app-pdf (d94-query 만 호출, X-Service-Token 으로 직접 인증)
-  skip-path-prefixes: /tsh/,/pdf/
+  #   (/tsh/api/v1/ayaan/** 의 d94-app-ayaan 도 /tsh/ 에 포함: X-AYAAN-Token 또는 d94 JWT 를 직접 검증)
+  # - /ecc/ : d94-ecc (X-ECC-Token 으로 직접 인증)
+  skip-path-prefixes: /tsh/,/pdf/,/ecc/
 
 spring:
   cloud:
@@ -33,6 +35,21 @@ spring:
             - Path=/api/auth/**
           filters:
             - StripPrefix=0
+
+        # D94 ayaan (d94-query 의 /tsh/** 보다 먼저 매칭되도록 order -1)
+        - id: d94-app-ayaan
+          uri: lb://d94-app-ayaan
+          order: -1
+          predicates:
+            - Path=/tsh/api/v1/ayaan/**
+
+        # D94 ECC (Telegram 봇·알림). /ecc 를 떼고 전달
+        - id: d94-ecc
+          uri: lb://d94-ecc
+          predicates:
+            - Path=/ecc/**
+          filters:
+            - StripPrefix=1
 
         # D94 조회 서비스
         - id: d94-query
