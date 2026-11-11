@@ -6,7 +6,8 @@ jwt:
   secret: ${JWT_SECRET}   # 환경변수로 주입 (befw-server-be와 동일한 값)
   # 게이트웨이 JWT 검사를 건너뛸 경로 prefix (쉼표 구분). 해당 서비스가 직접 JWT 를 검증한다
   # - /tsh/ : d94-query (키를 Base64 디코딩해 서명 → 이 게이트웨이의 키 형식과 달라 여기서 검증 불가)
-  skip-path-prefixes: /tsh/
+  # - /pdf/ : d94-app-pdf (d94-query 만 호출, X-Service-Token 으로 직접 인증)
+  skip-path-prefixes: /tsh/,/pdf/
 
 spring:
   cloud:
@@ -38,6 +39,15 @@ spring:
           uri: lb://d94-query
           predicates:
             - Path=/tsh/**
+
+        # D94 PDF 파서 (Eureka 미등록 → 컨테이너 이름으로 직접). 큰 PDF 파싱이 오래 걸려 타임아웃 120초
+        - id: d94-pdf
+          uri: http://d94-pdf-parser:8080
+          predicates:
+            - Path=/pdf/**
+          metadata:
+            response-timeout: 120000
+            connect-timeout: 5000
 
 eureka:
   client:
